@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "CSYViewController.h"
+#import <UserNotifications/UserNotifications.h>
+#import <JSPatch/JPEngine.h>
 
 @interface AppDelegate ()
 
@@ -16,10 +19,29 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    /*
+    [JPEngine startEngine];
+    NSString * patch = [[NSBundle mainBundle]pathForResource:@"test" ofType:@"js"];
+    NSString * script = [NSString stringWithContentsOfFile:patch encoding:NSUTF8StringEncoding error:nil];
+    [JPEngine evaluateScript:script];
+     */
+    [JPEngine startEngine];
+    NSData * data = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://127.0.0.1/js/test.js"]] returningResponse:0 error:nil];
+    
+    NSString * script = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+    
+   [JPEngine evaluateScript:script];
+    
+    
     // Override point for customization after application launch.
     return YES;
 }
 
++ (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host
+{
+    return YES;
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -49,3 +71,4 @@
 
 
 @end
+
